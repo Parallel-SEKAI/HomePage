@@ -27,7 +27,10 @@
   },
   "pnpm": {
     "supplyChainPolicy": {
-      "minimumReleaseAge": "0s"
+      "minimumReleaseAge": "24h",
+      "exceptions": [
+        "electron-to-chromium"
+      ]
     }
   }
 }
