@@ -36,6 +36,7 @@ jobs:
         run: pnpm install --frozen-lockfile
         env:
           PNPM_CONFIG_SUPPLY_CHAIN_POLICY_MINIMUM_RELEASE_AGE: 0
+          PNPM_CONFIG_TRUST_LOCKFILE: true
 
       - name: Build
         run: pnpm run build
