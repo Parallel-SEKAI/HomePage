@@ -1,0 +1,264 @@
+@import "tailwindcss";
+
+:root {
+  --accent: #DDAACC;
+  --accent-dim: #DDAACC33;
+  --accent-mid: #DDAACC77;
+  --bg-0: #05050a;
+  --bg-1: #0a0a14;
+  --bg-2: #111122;
+  --fg-0: #e8e8f0;
+  --fg-1: #a8a8c0;
+  --fg-2: #5a5a7a;
+  --grid: #1a1a2e;
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  background: var(--bg-0);
+  color: var(--fg-0);
+  font-family: "JetBrains Mono", "Fira Code", "Noto Sans SC", "Noto Sans TC", "Noto Sans JP", ui-monospace, SFMono-Regular, Menlo, monospace;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+/* CJK-friendly text rendering */
+.localized-text {
+  font-family: "Noto Sans SC", "Noto Sans TC", "Noto Sans JP", "PingFang SC", "PingFang TC", "Hiragino Sans", "Microsoft YaHei", sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+.localized-text h1, .localized-text h2, .localized-text h3,
+h1.localized-text, h2.localized-text, h3.localized-text {
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+* { box-sizing: border-box; }
+
+/* Scroll-snap container */
+.snap-root {
+  height: 100dvh;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) var(--bg-1);
+}
+.snap-root::-webkit-scrollbar { width: 8px; }
+.snap-root::-webkit-scrollbar-track { background: var(--bg-1); }
+.snap-root::-webkit-scrollbar-thumb { background: var(--accent-dim); border-left: 2px solid var(--accent); }
+
+.snap-section {
+  height: 100dvh;
+  width: 100%;
+  scroll-snap-align: start;
+  scroll-snap-stop: normal;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.snap-content {
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: none; /* Firefox */
+}
+.snap-content::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+}
+
+/* Specific lock for Hero Section since it is a dashboard layout designed to fit exactly 100vh */
+.hero-section {
+  height: 100dvh;
+  overflow: hidden;
+}
+
+/* Tech grid backgrounds */
+.bg-grid {
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 48px 48px;
+  background-position: -1px -1px;
+}
+.bg-grid-sm {
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+.bg-dots {
+  background-image: radial-gradient(circle, var(--grid) 1px, transparent 1.5px);
+  background-size: 20px 20px;
+}
+
+/* Scanlines overlay */
+.scanlines::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0,
+    transparent 2px,
+    rgba(255, 255, 255, 0.015) 2px,
+    rgba(255, 255, 255, 0.015) 3px
+  );
+  z-index: 2;
+}
+
+/* Animated diagonal stripes (caution tape style) */
+@keyframes stripe-scroll {
+  from { background-position: 0 0; }
+  to { background-position: 24px 0; }
+}
+.stripes {
+  background-image: repeating-linear-gradient(
+    45deg,
+    var(--accent) 0 6px,
+    transparent 6px 18px
+  );
+  animation: stripe-scroll 1.2s linear infinite;
+}
+
+/* Blink caret */
+@keyframes caret {
+  0%, 50% { opacity: 1; }
+  50.01%, 100% { opacity: 0; }
+}
+.caret::after {
+  content: "▋";
+  margin-left: 2px;
+  color: var(--accent);
+  animation: caret 1s steps(1) infinite;
+}
+
+/* Pulse dot */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(0.85); }
+}
+.pulse-dot {
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
+  animation: pulse-dot 1.6s ease-in-out infinite;
+}
+
+/* Slow spin */
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+.spin-slow { animation: spin-slow 12s linear infinite; }
+
+/* Marquee for logs */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.marquee {
+  display: flex;
+  white-space: nowrap;
+  animation: marquee 40s linear infinite;
+}
+
+/* Glow text */
+.glow {
+  text-shadow: 0 0 8px var(--accent-mid), 0 0 24px var(--accent-dim);
+}
+
+/* Corner brackets (tech frames) */
+.frame {
+  position: relative;
+  border: 1px solid var(--accent-dim);
+}
+/* Subtle accent marks at top-center and bottom-center for extra tech feel */
+.frame::before, .frame::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 1px;
+  width: 40px;
+  background: var(--accent);
+}
+.frame::before { top: -1px; }
+.frame::after { bottom: -1px; }
+
+/* Noise via SVG filter data URL */
+.noise {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.87 0 0 0 0 0.67 0 0 0 0 0.8 0 0 0 0.08 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  background-size: 120px 120px;
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+/* Progress bar fill animation */
+@keyframes bar-fill {
+  from { width: var(--bar-from, 0%); }
+  to   { width: var(--bar-to, 80%); }
+}
+.bar-fill {
+  animation: bar-fill 2.2s cubic-bezier(.2,.7,.2,1) infinite alternate;
+}
+
+/* Typewriter effect - simple line-by-line reveal */
+@keyframes reveal {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.reveal > * { animation: reveal .5s ease-out both; }
+.reveal > *:nth-child(1){ animation-delay: .05s; }
+.reveal > *:nth-child(2){ animation-delay: .25s; }
+.reveal > *:nth-child(3){ animation-delay: .45s; }
+.reveal > *:nth-child(4){ animation-delay: .65s; }
+.reveal > *:nth-child(5){ animation-delay: .85s; }
+.reveal > *:nth-child(6){ animation-delay: 1.05s; }
+.reveal > *:nth-child(7){ animation-delay: 1.25s; }
+.reveal > *:nth-child(8){ animation-delay: 1.45s; }
+
+/* Crosshair pattern */
+.crosshair::before, .crosshair::after {
+  content: "";
+  position: absolute;
+  background: var(--accent);
+  opacity: 0.4;
+}
+.crosshair::before { top: 50%; left: 0; right: 0; height: 1px; }
+.crosshair::after { left: 50%; top: 0; bottom: 0; width: 1px; }
+
+/* Clip diagonal cut */
+.clip-diag { clip-path: polygon(0 0, 100% 0, calc(100% - 16px) 100%, 16px 100%); }
+
+/* Radial fade for hero glow */
+.hero-glow {
+  background: radial-gradient(
+    ellipse 60% 50% at 50% 40%,
+    var(--accent-dim) 0%,
+    transparent 70%
+  );
+}
+
+/* Utility text colors */
+.text-accent { color: var(--accent); }
+.text-fg-1 { color: var(--fg-1); }
+.text-fg-2 { color: var(--fg-2); }
+.bg-accent { background-color: var(--accent); }
+.border-accent { border-color: var(--accent); }
+.border-accent-dim { border-color: var(--accent-dim); }
+
+/* Prevent FOUC while locale resolves */
+body { opacity: 0; animation: fadein .3s ease-out forwards; }
+@keyframes fadein { to { opacity: 1; } }
+
+/* Selection color */
+::selection { background: var(--accent); color: var(--bg-0); }
+
+/* Responsive tiny tweaks */
+@media (max-width: 768px) {
+  .hide-mobile { display: none !important; }
+}
